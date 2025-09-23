@@ -1,14 +1,15 @@
-import { d as r, b as d, C as c } from "./assets/index-nzPPvs9h.js";
-const S = Symbol("IsSelected"), l = r(
+import { d as i, R as d } from "./assets/index-DHLbTQAO.js";
+import { C as c } from "./assets/index-Dehu0T3X.js";
+const S = Symbol("IsSelected"), l = i(
   "IsSelected",
   S
-), m = () => {
+), f = () => {
   const e = new d({
     isSelected: () => !1,
     setSelection: () => {
     },
     selectedRefs: []
-  }), t = c.subcontext(), i = () => {
+  }), t = c.subcontext(), r = () => {
     const n = t.refsWith(l);
     e.set({
       selectedRefs: n,
@@ -20,10 +21,10 @@ const S = Symbol("IsSelected"), l = r(
       }
     });
   };
-  return c.subscribe(i), e.on("destroy", () => {
+  return c.subscribe(r), e.on("destroy", () => {
     c.remove(t);
   }), e;
 };
 export {
-  m as SelectionAPI
+  f as SelectionAPI
 };

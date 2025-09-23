@@ -1,16 +1,23 @@
-import { useMemo as f, useState as n, useEffect as c } from "react";
-const p = (o) => {
-  const e = f(
-    () => typeof o == "function" ? o() : o,
-    [o]
-  ), [u, s] = n(e.value);
-  return c(() => {
-    const t = typeof o == "function" ? o() : o;
-    return t.on("change", s), () => {
-      t.emit("destroy");
+import { useMemo as m, useState as s, useEffect as n, useRef as p } from "react";
+import { C as u } from "./assets/index-Dehu0T3X.js";
+const b = (t) => {
+  const e = m(
+    () => typeof t == "function" ? t() : t,
+    [t]
+  ), [c, f] = s(e.value);
+  return n(() => {
+    const o = typeof t == "function" ? t() : t;
+    return o.on("change", f), () => {
+      o.emit("destroy");
     };
-  }, [o]), u;
+  }, [t]), c;
+}, l = () => {
+  const [t] = s(() => u.subcontext()), e = p(t);
+  return n(() => () => {
+    u.remove(e.current);
+  }, []), t;
 };
 export {
-  p as useReactive
+  b as useReactive,
+  l as useSubcontext
 };
