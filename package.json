@@ -10,9 +10,23 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist"
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./react": {
+      "import": "./dist/react.js",
+      "types": "./dist/react.d.ts"
+    },
+    "./diff": {
+      "import": "./dist/diff.js",
+      "types": "./dist/diff.d.ts"
+    },
+    "./selection": {
+      "import": "./dist/selection.js",
+      "types": "./dist/selection.d.ts"
     }
   },
   "dependencies": {
@@ -30,6 +44,7 @@
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.41.0",
     "vite": "^7.1.3",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.4"
   }
 }
