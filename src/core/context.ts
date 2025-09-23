@@ -1,4 +1,4 @@
-import { deepEqual } from "../../lib/deepEqual";
+import { deepEqual } from "../utils/deepEqual";
 import { FieldType } from "./fields";
 import { Ref, RefWith } from "./refs";
 import { $fields } from "./refs";

@@ -1,7 +1,7 @@
-import { Reactive } from "./reactive";
-import { CONTEXT } from "./context";
-import { defineField } from "./context/fields";
-import { Ref } from "./context/refs";
+import { Reactive } from "../reactive";
+import { CONTEXT } from "../core";
+import { defineField } from "../core/fields";
+import { Ref } from "../core/refs";
 
 const IsSelectedSymbol = Symbol("IsSelected");
 type IsSelected = typeof IsSelectedSymbol;

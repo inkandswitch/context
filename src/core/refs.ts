@@ -1,6 +1,6 @@
 import * as Automerge from "@automerge/automerge";
 import { AutomergeUrl, DocHandle } from "@automerge/automerge-repo";
-import { lookup } from "../../lib/lookup";
+import { lookup } from "../utils/lookup";
 import { FieldType, FieldValue } from "./fields";
 
 export const $fields = Symbol("fields");

@@ -1,12 +1,12 @@
 import * as Automerge from "@automerge/automerge";
 import { DocHandle } from "@automerge/automerge-repo";
-import { last } from "../lib/last";
-import { lookup } from "../lib/lookup";
-import { memoize } from "../lib/memoize";
-import { CONTEXT } from "./context";
-import { contextComputation } from "./context/computation";
-import { defineField } from "./context/fields";
-import { PathRef, Ref, RefWith, TextSpanRef } from "./context/refs";
+import { last } from "../utils/last";
+import { lookup } from "../utils/lookup";
+import { memoize } from "../utils/memoize";
+import { CONTEXT } from "../core";
+import { contextComputation } from "../core/computation";
+import { defineField } from "../core/fields";
+import { PathRef, Ref, RefWith, TextSpanRef } from "../core/refs";
 
 type AddedDiff = {
   type: "added";

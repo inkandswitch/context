@@ -1,31 +1,20 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import wasm from "vite-plugin-wasm";
-import tailwindcss from "@tailwindcss/vite";
-import importmap from "../../inkandswitch/gaios/packages/scion-gaios/importmap.json" with { type: "json" };
-import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 
 export default defineConfig({
-  plugins: [wasm(), react(), tailwindcss(), cssInjectedByJsPlugin()],
+  plugins: [],
   build: {
     lib: {
-      entry: "src/main.tsx",
-      name: "Mini Patchwork",
-      fileName: "index.js",
+      entry: {
+        index: "src/index.tsx",
+        react: "src/frameworks/react.ts",
+        diff: "src/apis/diff.ts",
+        selection: "src/apis/selection.ts",
+      },
+      fileName: (format, entryName) => `${entryName}.js`,
       formats: ["es"],
     },
     rollupOptions: {
-      external: [
-        "react",
-        "react/jsx-runtime",
-        "react-dom",
-        "react-dom/client",
-        "@automerge/automerge",
-        "@automerge/automerge-repo",
-        "@automerge/automerge/slim",
-        "@automerge/automerge-repo/slim",
-        "@automerge/automerge-repo-react-hooks",
-      ],
+      external: ["react", "@automerge/automerge-repo", "@automerge/automerge"],
       preserveEntrySignatures: "allow-extension",
       output: {
         format: "es",

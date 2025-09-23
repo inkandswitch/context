@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Reactive } from ".";
+import { Reactive } from "../reactive";
 
 export const useReactive = <T>(
   reactiveOrFn: Reactive<T> | (() => Reactive<T>)
