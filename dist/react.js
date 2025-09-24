@@ -1,23 +1,30 @@
-import { useMemo as m, useState as s, useEffect as n, useRef as p } from "react";
-import { C as u } from "./assets/index-DgM1U5km.js";
-const b = (t) => {
-  const e = m(
-    () => typeof t == "function" ? t() : t,
-    [t]
-  ), [c, f] = s(e.value);
-  return n(() => {
-    const o = typeof t == "function" ? t() : t;
-    return o.on("change", f), () => {
-      o.emit("destroy");
+import { useMemo, useState, useEffect, useRef } from 'react';
+import { C as CONTEXT } from './assets/index-DfTvtprv.js';
+
+const useReactive = (reactiveOrFn) => {
+  const reactive = useMemo(
+    () => typeof reactiveOrFn === "function" ? reactiveOrFn() : reactiveOrFn,
+    [reactiveOrFn]
+  );
+  const [value, setValue] = useState(reactive.value);
+  useEffect(() => {
+    const reactive2 = typeof reactiveOrFn === "function" ? reactiveOrFn() : reactiveOrFn;
+    reactive2.on("change", setValue);
+    return () => {
+      reactive2.emit("destroy");
     };
-  }, [t]), c;
-}, l = () => {
-  const [t] = s(() => u.subcontext()), e = p(t);
-  return n(() => () => {
-    u.remove(e.current);
-  }, []), t;
+  }, [reactiveOrFn]);
+  return value;
 };
-export {
-  b as useReactive,
-  l as useSubcontext
+const useSubcontext = () => {
+  const [subcontext] = useState(() => CONTEXT.subcontext());
+  const subcontextRef = useRef(subcontext);
+  useEffect(() => {
+    return () => {
+      CONTEXT.remove(subcontextRef.current);
+    };
+  }, []);
+  return subcontext;
 };
+
+export { useReactive, useSubcontext };

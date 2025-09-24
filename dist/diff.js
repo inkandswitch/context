@@ -1,77 +1,112 @@
-import * as u from "@automerge/automerge";
-import { C as f, P as y, b as m, T as P } from "./assets/index-DgM1U5km.js";
-import { m as R } from "./assets/memoize-CPDYtx9i.js";
-import { R as v, d as x } from "./assets/index-DHLbTQAO.js";
-const p = (t) => t.length > 0 ? t[t.length - 1] : void 0, S = (t) => {
-  const o = new v(t(f));
-  return f.subscribe(() => {
-    o.set(t(f));
-  }), o;
-}, A = Symbol("diff"), i = x("diff", A), T = (t, o) => {
-  const r = [];
-  if (!o || !t)
+import * as Automerge from '@automerge/automerge';
+import { C as CONTEXT, P as PathRef, b as lookup, T as TextSpanRef } from './assets/index-DfTvtprv.js';
+import { m as memoize } from './assets/memoize-CsLHG05J.js';
+import { R as Reactive, d as defineField } from './assets/index-uxx6B13V.js';
+
+const last = (array) => {
+  return array.length > 0 ? array[array.length - 1] : void 0;
+};
+
+const contextComputation = (computation) => {
+  const api = new Reactive(computation(CONTEXT));
+  CONTEXT.subscribe(() => {
+    api.set(computation(CONTEXT));
+  });
+  return api;
+};
+
+const DiffSymbol = Symbol("diff");
+const Diff = defineField("diff", DiffSymbol);
+const getDiffOfDoc = (docHandle, headsBefore) => {
+  const changedRefs = [];
+  if (!headsBefore || !docHandle) {
     return [];
-  const h = u.view(t.doc(), o), w = t.doc(), k = u.diff(
-    w,
-    o,
-    u.getHeads(w)
-  ), b = /* @__PURE__ */ new Set();
-  for (const e of k) {
-    const g = typeof p(e.path) == "number" ? e.path.slice(0, -1) : e.path;
-    for (let s = g.length; s > 0; s--) {
-      const n = g.slice(0, s), a = JSON.stringify(n);
-      if (b.has(a)) break;
-      const c = new y(t, n), l = m(h, n);
-      l ? r.push(c.with(i({ type: "changed", before: l }))) : r.push(c.with(i({ type: "added" }))), b.add(a);
+  }
+  const docBefore = Automerge.view(docHandle.doc(), headsBefore);
+  const docAfter = docHandle.doc();
+  const patches = Automerge.diff(
+    docAfter,
+    headsBefore,
+    Automerge.getHeads(docAfter)
+  );
+  const modifiedPaths = /* @__PURE__ */ new Set();
+  for (const patch of patches) {
+    const ancestorPath = typeof last(patch.path) === "number" ? patch.path.slice(0, -1) : patch.path;
+    for (let i = ancestorPath.length; i > 0; i--) {
+      const ancestorSubPath = ancestorPath.slice(0, i);
+      const key = JSON.stringify(ancestorSubPath);
+      if (modifiedPaths.has(key)) break;
+      const ancestorRef = new PathRef(docHandle, ancestorSubPath);
+      const before = lookup(docBefore, ancestorSubPath);
+      if (before) {
+        changedRefs.push(ancestorRef.with(Diff({ type: "changed", before })));
+      } else {
+        changedRefs.push(ancestorRef.with(Diff({ type: "added" })));
+      }
+      modifiedPaths.add(key);
     }
-    const d = new y(t, e.path);
-    switch (e.action) {
+    const objRef = new PathRef(docHandle, patch.path);
+    switch (patch.action) {
       case "put":
-        r.push(d.with(i({ type: "added" })));
+        changedRefs.push(objRef.with(Diff({ type: "added" })));
         break;
       case "del": {
-        if (typeof p(e.path) == "number") {
-          const s = e.path.slice(0, -1), n = m(h, s);
-          if (console.log("position", p(e.path)), typeof n == "string") {
-            const a = p(e.path), c = new P(
-              t,
-              s,
-              a,
-              a
+        if (typeof last(patch.path) === "number") {
+          const parentPath = patch.path.slice(0, -1);
+          const parent = lookup(docBefore, parentPath);
+          console.log("position", last(patch.path));
+          if (typeof parent === "string") {
+            const position = last(patch.path);
+            const textSpan = new TextSpanRef(
+              docHandle,
+              parentPath,
+              position,
+              position
             );
-            r.push(c.with(i({ type: "deleted", before: "" })));
-          } else throw Array.isArray(n) ? new Error("not implemented") : new Error("Unexpected value, this should never happen");
+            const before = "";
+            changedRefs.push(textSpan.with(Diff({ type: "deleted", before })));
+          } else if (Array.isArray(parent)) {
+            throw new Error("not implemented");
+          } else {
+            throw new Error("Unexpected value, this should never happen");
+          }
         } else {
-          const s = m(h, e.path);
-          r.push(d.with(i({ type: "deleted", before: s })));
+          const before = lookup(docBefore, patch.path);
+          changedRefs.push(objRef.with(Diff({ type: "deleted", before })));
         }
         break;
       }
       case "insert": {
-        r.push(d.with(i({ type: "added" })));
+        changedRefs.push(objRef.with(Diff({ type: "added" })));
         break;
       }
       case "splice":
         {
-          const s = e.path.slice(0, -1), n = p(e.path), a = n + e.value.length, c = new P(t, s, n, a);
-          r.push(c.with(i({ type: "added" })));
+          const parentPath = patch.path.slice(0, -1);
+          const from = last(patch.path);
+          const to = from + patch.value.length;
+          const textSpan = new TextSpanRef(docHandle, parentPath, from, to);
+          changedRefs.push(textSpan.with(Diff({ type: "added" })));
         }
         break;
     }
   }
-  return r;
-}, C = R(
-  (t) => S(() => f.resolve(t).get(i)),
-  (t) => t.toId()
-), I = R(
-  (t) => S(() => t ? f.refsWith(i).filter(
-    (o) => o.isPartOf(t) && !o.isEqual(t)
-  ) : []),
-  (t) => t?.toId()
-);
-export {
-  i as Diff,
-  C as getDiff,
-  T as getDiffOfDoc,
-  I as getRefsWithDiffAt
+  return changedRefs;
 };
+const getDiff = memoize(
+  (ref) => contextComputation(() => CONTEXT.resolve(ref).get(Diff)),
+  (ref) => ref.toId()
+);
+const getRefsWithDiffAt = memoize(
+  (ref) => contextComputation(() => {
+    if (!ref) {
+      return [];
+    }
+    return CONTEXT.refsWith(Diff).filter(
+      (refWithDiff) => refWithDiff.isPartOf(ref) && !refWithDiff.isEqual(ref)
+    );
+  }),
+  (ref) => ref?.toId()
+);
+
+export { Diff, getDiff, getDiffOfDoc, getRefsWithDiffAt };

@@ -1,30 +1,36 @@
-import { d as i, R as d } from "./assets/index-DHLbTQAO.js";
-import { C as c } from "./assets/index-DgM1U5km.js";
-const S = Symbol("IsSelected"), l = i(
+import { d as defineField, R as Reactive } from './assets/index-uxx6B13V.js';
+import { C as CONTEXT } from './assets/index-DfTvtprv.js';
+
+const IsSelectedSymbol = Symbol("IsSelected");
+const IsSelected = defineField(
   "IsSelected",
-  S
-), f = () => {
-  const e = new d({
-    isSelected: () => !1,
+  IsSelectedSymbol
+);
+const SelectionAPI = () => {
+  const api = new Reactive({
+    isSelected: () => false,
     setSelection: () => {
     },
     selectedRefs: []
-  }), t = c.subcontext(), r = () => {
-    const n = t.refsWith(l);
-    e.set({
-      selectedRefs: n,
-      isSelected(s) {
-        return n.some((o) => o.doesOverlap(s));
+  });
+  const selectionContext = CONTEXT.subcontext();
+  const onChangeContext = () => {
+    const selectedRefs = selectionContext.refsWith(IsSelected);
+    api.set({
+      selectedRefs,
+      isSelected(ref) {
+        return selectedRefs.some((selectedRef) => selectedRef.doesOverlap(ref));
       },
-      setSelection(s) {
-        t.replace(s.map((o) => o.with(l(!0))));
+      setSelection(refs) {
+        selectionContext.replace(refs.map((ref) => ref.with(IsSelected(true))));
       }
     });
   };
-  return c.subscribe(r), e.on("destroy", () => {
-    c.remove(t);
-  }), e;
+  CONTEXT.subscribe(onChangeContext);
+  api.on("destroy", () => {
+    CONTEXT.remove(selectionContext);
+  });
+  return api;
 };
-export {
-  f as SelectionAPI
-};
+
+export { SelectionAPI };

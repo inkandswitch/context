@@ -12,6 +12,7 @@ export default defineConfig({
     }),
   ],
   build: {
+    minify: false,
     lib: {
       entry: {
         index: "src/index.tsx",
