@@ -209,19 +209,16 @@ const H = (n, t) => {
 class v {
   #e = /* @__PURE__ */ new Set();
   #t = /* @__PURE__ */ new Map();
-  #r = /* @__PURE__ */ new Set();
+  #s = /* @__PURE__ */ new Set();
   constructor() {
-    setInterval(() => {
-      this.#s();
-    }, 100);
   }
   // ==== mutation methods ====
   add(t) {
-    p(this.#t, t), this.#s();
+    p(this.#t, t), this.#r();
   }
   replace(t) {
     const e = /* @__PURE__ */ new Map();
-    p(e, t), !b(this.#t, e) && (this.#t = e, this.#s());
+    p(e, t), !b(this.#t, e) && (this.#t = e, this.#r());
   }
   // ==== query methods ====
   resolve(t) {
@@ -233,7 +230,7 @@ class v {
     if (e)
       for (const [s, r] of e[o].entries())
         t[o].set(s, r);
-    for (const s of this.#r)
+    for (const s of this.#s)
       s.#n(t);
   }
   get refs() {
@@ -248,7 +245,7 @@ class v {
       for (const [h, i] of e[o].entries())
         r[o].set(h, i);
     }
-    for (const e of this.#r)
+    for (const e of this.#s)
       e.#o(t);
   }
   refsWith(t) {
@@ -257,7 +254,7 @@ class v {
     );
   }
   // ==== subscription methods ====
-  #s = () => {
+  #r = () => {
     this.#e.forEach((t) => t());
   };
   subscribe(t) {
@@ -269,10 +266,10 @@ class v {
   // ==== subcontext methods ====
   subcontext() {
     const t = new v();
-    return t.subscribe(this.#s), this.#r.add(t), t;
+    return t.subscribe(this.#r), this.#s.add(t), t;
   }
   remove(t) {
-    t.unsubscribe(this.#s), this.#r.delete(t);
+    t.unsubscribe(this.#r), this.#s.delete(t);
   }
 }
 const p = (n, t) => {

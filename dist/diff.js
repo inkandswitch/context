@@ -1,5 +1,5 @@
 import * as u from "@automerge/automerge";
-import { C as f, P as y, b as m, T as P } from "./assets/index-Dehu0T3X.js";
+import { C as f, P as y, b as m, T as P } from "./assets/index-DgM1U5km.js";
 import { m as R } from "./assets/memoize-CPDYtx9i.js";
 import { R as v, d as x } from "./assets/index-DHLbTQAO.js";
 const p = (t) => t.length > 0 ? t[t.length - 1] : void 0, S = (t) => {
