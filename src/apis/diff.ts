@@ -172,7 +172,7 @@ export const getRefsWithDiffAt = memoize(
       }
 
       return CONTEXT.refsWith(Diff).filter((refWithDiff) =>
-        refWithDiff.isChildOf(ref)
+        refWithDiff.isElementOf(ref)
       );
     }),
   (ref?: Ref) => ref?.toId()

@@ -7,26 +7,26 @@ export const $fields = Symbol("fields");
 
 export type RefWith<Fields extends symbol> = Ref<unknown, unknown, Fields>;
 
-type SerializedPathRef = {
+export type SerializedPathRef = {
   type: "path";
   path: Automerge.Prop[];
 };
 
-type SerializedIdRef = {
+export type SerializedIdRef = {
   type: "id";
   path: Automerge.Prop[];
   key: Automerge.Prop;
   id: string;
 };
 
-type SerializedTextSpanRef = {
+export type SerializedTextSpanRef = {
   type: "text-span";
   path: Automerge.Prop[];
   from: Automerge.Cursor;
   to: Automerge.Cursor;
 };
 
-type SerializedRef =
+export type SerializedRef =
   | SerializedPathRef
   | SerializedIdRef
   | SerializedTextSpanRef;
@@ -38,7 +38,7 @@ export abstract class Ref<
 > {
   [$fields] = new Map<symbol, any>();
 
-  protected readonly docHandle: DocHandle<Doc>;
+  readonly docHandle: DocHandle<Doc>;
   readonly path: Automerge.Prop[];
 
   constructor(docHandle: DocHandle<Doc>, path: Automerge.Prop[]) {
@@ -102,7 +102,8 @@ export abstract class Ref<
     return this.toId() === other.toId();
   }
 
-  isChildOf(other: Ref) {
+  // is other a ref to an item in the collection the current ref points to
+  isElementOf(other: Ref) {
     if (
       other.docHandle !== this.docHandle ||
       other.path.length + 1 !== this.path.length
@@ -176,11 +177,11 @@ export class PathRef<
   }
 }
 
-export class IdRef<Value, Doc, Fields extends symbol = never> extends Ref<
-  Value,
-  Doc,
-  Fields
-> {
+export class IdRef<
+  Value = unknown,
+  Doc = unknown,
+  Fields extends symbol = never
+> extends Ref<Value, Doc, Fields> {
   #id: any;
   #key: Automerge.Prop;
 
@@ -268,7 +269,7 @@ export class TextSpanRef<
     return `${this.#fromCursor}:${this.#toCursor}`;
   }
 
-  isChildOf(other: Ref): boolean {
+  isElementOf(other: Ref): boolean {
     return this.doesOverlap(other);
   }
 

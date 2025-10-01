@@ -85,7 +85,8 @@ class Ref {
   doesOverlap(other) {
     return this.toId() === other.toId();
   }
-  isChildOf(other) {
+  // is other a ref to an item in the collection the current ref points to
+  isElementOf(other) {
     if (other.docHandle !== this.docHandle || other.path.length + 1 !== this.path.length) {
       return false;
     }
@@ -190,7 +191,7 @@ class TextSpanRef extends Ref {
   toId() {
     return `${this.#fromCursor}:${this.#toCursor}`;
   }
-  isChildOf(other) {
+  isElementOf(other) {
     return this.doesOverlap(other);
   }
   doesOverlap(other) {

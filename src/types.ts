@@ -1,4 +1,4 @@
-import { AutomergeUrl, Doc, Repo } from "@automerge/automerge-repo";
+import { AutomergeUrl, Repo } from "@automerge/automerge-repo";
 
 export type DataType<Doc = unknown> = {
   id: string;

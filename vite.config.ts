@@ -20,6 +20,7 @@ export default defineConfig({
         solid: "src/frameworks/solid.ts",
         diff: "src/apis/diff.ts",
         selection: "src/apis/selection.ts",
+        comments: "src/apis/comments.ts",
       },
       fileName: (format, entryName) => `${entryName}.js`,
       formats: ["es"],

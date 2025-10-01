@@ -1,18 +1,11 @@
 import * as Automerge from '@automerge/automerge';
-import { C as CONTEXT, P as PathRef, b as lookup, T as TextSpanRef } from './assets/index-CIxD3AZv.js';
+import { P as PathRef, b as lookup, T as TextSpanRef, C as CONTEXT } from './assets/index-CnahhtPs.js';
 import { m as memoize } from './assets/memoize-CsLHG05J.js';
-import { R as Reactive, d as defineField } from './assets/index-uxx6B13V.js';
+import { c as contextComputation } from './assets/computation-DhDdHiPJ.js';
+import { d as defineField } from './assets/index-uxx6B13V.js';
 
 const last = (array) => {
   return array.length > 0 ? array[array.length - 1] : void 0;
-};
-
-const contextComputation = (computation) => {
-  const api = new Reactive(computation(CONTEXT));
-  CONTEXT.subscribe(() => {
-    api.set(computation(CONTEXT));
-  });
-  return api;
 };
 
 const DiffSymbol = Symbol("diff");
@@ -103,7 +96,7 @@ const getRefsWithDiffAt = memoize(
       return [];
     }
     return CONTEXT.refsWith(Diff).filter(
-      (refWithDiff) => refWithDiff.isChildOf(ref)
+      (refWithDiff) => refWithDiff.isElementOf(ref)
     );
   }),
   (ref) => ref?.toId()

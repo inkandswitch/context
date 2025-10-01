@@ -32,11 +32,16 @@
     "./selection": {
       "import": "./dist/selection.js",
       "types": "./dist/selection.d.ts"
+    },
+    "./comments": {
+      "import": "./dist/comments.js",
+      "types": "./dist/comments.d.ts"
     }
   },
   "dependencies": {
     "@automerge/automerge": "^3.1.2",
     "@automerge/automerge-repo": "^2.3.0",
+    "eventemitter3": "^5.0.1",
     "react": "^18.3.0"
   },
   "devDependencies": {
