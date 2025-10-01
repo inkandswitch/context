@@ -21,6 +21,10 @@
       "import": "./dist/react.js",
       "types": "./dist/react.d.ts"
     },
+    "./solid": {
+      "import": "./dist/solid.js",
+      "types": "./dist/solid.d.ts"
+    },
     "./diff": {
       "import": "./dist/diff.js",
       "types": "./dist/diff.d.ts"

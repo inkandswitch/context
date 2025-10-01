@@ -17,6 +17,7 @@ export default defineConfig({
       entry: {
         index: "src/index.tsx",
         react: "src/frameworks/react.ts",
+        solid: "src/frameworks/solid.ts",
         diff: "src/apis/diff.ts",
         selection: "src/apis/selection.ts",
       },
@@ -24,7 +25,12 @@ export default defineConfig({
       formats: ["es"],
     },
     rollupOptions: {
-      external: ["react", "@automerge/automerge-repo", "@automerge/automerge"],
+      external: [
+        "react",
+        "solid-js",
+        "@automerge/automerge-repo",
+        "@automerge/automerge",
+      ],
       preserveEntrySignatures: "allow-extension",
       output: {
         format: "es",

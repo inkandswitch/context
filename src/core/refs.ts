@@ -102,10 +102,10 @@ export abstract class Ref<
     return this.toId() === other.toId();
   }
 
-  isPartOf(other: Ref) {
+  isChildOf(other: Ref) {
     if (
       other.docHandle !== this.docHandle ||
-      other.path.length > this.path.length
+      other.path.length + 1 !== this.path.length
     ) {
       return false;
     }
@@ -266,6 +266,10 @@ export class TextSpanRef<
 
   toId(): string {
     return `${this.#fromCursor}:${this.#toCursor}`;
+  }
+
+  isChildOf(other: Ref): boolean {
+    return this.doesOverlap(other);
   }
 
   doesOverlap(other: Ref): boolean {

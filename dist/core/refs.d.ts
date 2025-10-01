@@ -37,7 +37,7 @@ export declare abstract class Ref<Value = unknown, Doc = unknown, Fields extends
     change(fn: (obj: Value) => void): void;
     isEqual(other: Ref): boolean;
     doesOverlap(other: Ref): boolean;
-    isPartOf(other: Ref): boolean;
+    isChildOf(other: Ref): boolean;
     with<Type extends symbol, Value>(field: FieldValue<Type, Value>): Ref<Value, Doc, Fields | Type>;
     get<Type extends symbol, Value>(field: FieldType<Type, Value>): Type extends Fields ? Value : Value | undefined;
     has<Type extends symbol, Value>(field: FieldType<Type, Value>): Type extends Fields ? true : boolean;
@@ -65,6 +65,7 @@ export declare class TextSpanRef<Value = string, Doc = unknown, Fields extends s
     get to(): number;
     protected resolve(doc: Automerge.Doc<Doc>): Value;
     toId(): string;
+    isChildOf(other: Ref): boolean;
     doesOverlap(other: Ref): boolean;
     slice(from: number, to: number): TextSpanRef<string, Doc, never>;
     change(fn: (obj: Value) => void): void;

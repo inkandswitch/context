@@ -1,5 +1,5 @@
 import * as Automerge from '@automerge/automerge';
-import { C as CONTEXT, P as PathRef, b as lookup, T as TextSpanRef } from './assets/index-DfTvtprv.js';
+import { C as CONTEXT, P as PathRef, b as lookup, T as TextSpanRef } from './assets/index-CIxD3AZv.js';
 import { m as memoize } from './assets/memoize-CsLHG05J.js';
 import { R as Reactive, d as defineField } from './assets/index-uxx6B13V.js';
 
@@ -103,7 +103,7 @@ const getRefsWithDiffAt = memoize(
       return [];
     }
     return CONTEXT.refsWith(Diff).filter(
-      (refWithDiff) => refWithDiff.isPartOf(ref) && !refWithDiff.isEqual(ref)
+      (refWithDiff) => refWithDiff.isChildOf(ref)
     );
   }),
   (ref) => ref?.toId()
